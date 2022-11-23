@@ -18,8 +18,7 @@ var yScale = d3.scaleLinear()
     .domain([0, 88*1.1]);
 
 
-//begin script when window loads
-window.onload = setMap();
+
 
 function setMap(){
 
@@ -179,6 +178,12 @@ function choropleth(props, colorScale){
 
 //this is changing the data presentation as the attribute selection changes
 function setEnumerationUnits(italyRegions, map, path, colorScale){
+    console.log(italyRegions);
+    console.log(map);
+    console.log(path);
+    console.log(colorScale);
+
+
     var regions = map.selectAll(".regions")
         .data(italyRegions)
         .enter()
@@ -191,13 +196,19 @@ function setEnumerationUnits(italyRegions, map, path, colorScale){
             return choropleth(d.properties, colorScale);
         })
         //adding mouseover functionality for data retrieval
-        .on("mouseover", function(d){
+        .on("mouseover", function(e,d){
+            console.log(d); //testing where the variable gets passed through.
+            console.log(d.properties);
             highlight(d.properties);
         })
-        .on("mouseout", function(d){
+        .on("mouseout", function(e,d){
+            console.log(d);//testing where the variable gets passed through.
+            console.log(d.properties);
             dehighlight(d.properties);
         })
         .on("mousemove", moveLabel);
+
+    console.log(regions)
 
     var desc = regions.append("desc")
     .text('{"stroke": "#000", "stroke-width": "0.5px"}');
@@ -402,6 +413,9 @@ function updateChart(bars, n, colorScale){
 //function to highlight regions and bars
 function highlight(props){
     //change stroke to white
+    console.log(props)  //checking to see what the variable is.
+    //after checking the variable is undefined.
+    // makes me think that there is an issue with passing the caraible through.
     var selected = d3.selectAll("." + props.ID_1)
         .style("stroke", "white")
         .style("stroke-width", "3");
@@ -476,6 +490,9 @@ function moveLabel(){
         .style("top", y + "px");
 };
 
+//begin script when window loads
+    window.onload = setMap();
+    //normally you should have this call at the end of the script,
+    // may not cause issues up at top, but better to have it at the end.
 
-    
 })();
